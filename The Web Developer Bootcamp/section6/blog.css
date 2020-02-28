@@ -1,0 +1,22 @@
+body{
+    border: solid #F9A825 20px;
+    /* 占80%，但最大只能700px */
+    max-width: 700px;
+    width: 80%;
+    /* 等同于margin:20px auto */
+    margin: 20px auto 20px auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.date{
+    color: #3498db;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.left-border{
+    border-left: solid #F9A825 10px;
+    padding-left: 5px;
+}
+#bottom-border{
+    border-bottom: #CFD8DC solid 2px;
+}

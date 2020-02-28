@@ -1,0 +1,6 @@
+body with  20px border
+border color: #bdc3c7
+date color: #3498db
+h2 color:#2c3e50 letter spacing upper
+
+font:source sans pro
