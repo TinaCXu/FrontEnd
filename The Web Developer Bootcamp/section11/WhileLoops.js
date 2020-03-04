@@ -18,7 +18,10 @@ while(num3 <= 333){
     num3 +=2;
 }
 //Print all numbers divisible by 5 and 3 between 5 and 50
-var num4 = 5;
-while(num4 <= 50){
-    
+var i = 5;
+while(i <= 50){
+    if(i % 15 === 0){
+        console.log(i)
+    }
+    i +=1
 }
