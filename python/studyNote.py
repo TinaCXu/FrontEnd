@@ -32,3 +32,10 @@ print (len(fruits)) #3
 print (range(len(fruits))) #range(0,3)
 range(3)
 range(0,1,2)
+
+#Python3 iterators and generators
+list=[1,2,3,4]
+it = iter(list)
+print(next(it)) #next(iterator[, default]) #out put =1
+print(next(it)) #function 2 times, iter mannually, using for loop
+
