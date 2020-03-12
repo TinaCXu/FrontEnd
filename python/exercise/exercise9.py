@@ -3,7 +3,7 @@ standard = random.randint(1,9)
 number = input("Please guess the random number: ")
 number = int(number)
 i = 1
-while number != standard:
+while number != standard: 
     if (number < standard):
         print ("too low")
         i += 1
