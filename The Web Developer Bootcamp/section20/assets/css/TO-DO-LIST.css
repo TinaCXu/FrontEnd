@@ -1,0 +1,23 @@
+input {
+    box-sizing: border-box;
+    height: 18px;
+    width: inherit;
+
+}
+
+div {
+    width: 360px;
+    margin: 0px auto;
+    background-color:#f7f7f7;
+
+}
+
+i {
+    width: 10px;
+}
+.completed {
+    color: gray;
+    text-decoration: line-through;
+}
+
+
