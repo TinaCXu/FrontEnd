@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Users</title>
+    </head>
+    <body>
+       <h1>Here are your users:</h1>
+       <div class="apptwo">
+           {% if user_records %} <!--if we have access records-->
+                <ol>
+                    {% for user in user_records %}
+                    <li>User Info
+                        <ul>
+                            <li><span>First Name: </span>{{ user.first_name }}</li>
+                            <li><span>Last Name: </span>{{ user.last_name }}</li>
+                            <li><span>Email: </span>{{ user.mail }}</li>
+                        </ul>
+                    </li>
+                    {% endfor %}
+                </ol>
+            {% else %}
+                <p>NO USER RECORDS FOUND</p>
+            {% endif %}
+       </div>
+    </body>
+</html>
