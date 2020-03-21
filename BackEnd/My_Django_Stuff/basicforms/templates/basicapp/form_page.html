@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FORM</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body>
+        <h1>Fill out the form!</h1>
+        <div class='container'>
+            <form method="POST">
+                {{form.as_p}}
+                <!-- as_p,the form will not go from left to right but from top to bottom -->
+                {% csrf_token %}
+                <!-- Django requies CSRF tag to make sure the user safety -->
+                <input type="submit" class="btn btn-primary" value="Submit">
+            </form>
+
+        </div>
+    </body>
+</html>
