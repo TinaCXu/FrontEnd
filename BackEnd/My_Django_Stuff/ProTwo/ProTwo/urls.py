@@ -20,8 +20,9 @@ from AppTwo import views
 
 urlpatterns = [
     path('help/',include('AppTwo.urls')),
-    # path('', views.index, name='index'),
+    path('', views.index, name='index'),
     path('users/',include('AppTwo.urls')),
-    path('',views.users, name='users'),
+    # path('',views.users, name='users'),
     path('admin/', admin.site.urls),
+    path('signin/',views.form_name_view,name='form_name')
 ]   
