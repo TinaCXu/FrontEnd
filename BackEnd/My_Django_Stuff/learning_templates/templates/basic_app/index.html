@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<!-- extend tag should go first -->
+{% extends "basic_app/base.html" %}
+<!-- load the custome filter liabrary -->
+{% load my_extras %}
+    {% block body_block%}
+        <h1>WELCOME TO INDEX</h1>
+        <h2>WELCOME AGAIN!</h2>
+        <!-- build custome filter -->
+        <h2>{{ text|cut:'world' }}</h2>
+        <h2>{{ number|add:99 }}</h2>
+    {% endblock %}

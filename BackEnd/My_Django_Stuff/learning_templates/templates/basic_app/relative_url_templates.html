@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <h1>WELCOME TO RELATIVE URL TEMPLATES</h1>
+        <!-- match basic_app.urls  app_name:url name  be careful there is no space inside '' -->
+        <a href="{% url 'basic_app:other' %}">THE OTHER PAGE</a>
+        <!-- admin is a defaul django app, see the app lists in settings, migrate default application when use this -->
+        <a href="{% url 'admin:index' %}">LINK TO ADMIN</a>
+        <a href="{% url 'index' %}">LINK TO INDEX</a>
+
+    </body>
+</html>
