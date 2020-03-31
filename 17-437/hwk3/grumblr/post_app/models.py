@@ -5,10 +5,7 @@ from django import template,templatetags
 # Create your models here.
 
 class UserProfileInfo(models.Model):
-    user_name = models.CharField(unique=True,max_length=200)
-    first_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
-    password = models.CharField(max_length=200)    
-    
+    user = models.OneToOneField(User,on_delete=models.CASCADE, default=None)
+    introduction = models.TextField(max_length=500, blank=False, null=False, default='INTRODUCTION')
     def __str__(self):
-            return self.user_name
+        return self.user.username
