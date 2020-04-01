@@ -39,3 +39,16 @@ it = iter(list)
 print(next(it)) #next(iterator[, default]) #out put =1
 print(next(it)) #function 2 times, iter mannually, using for loop
 
+class JustCounter:
+    __secretCount = 0  # 私有变量
+    publicCount = 0    # 公开变量
+ 
+    def count(self):
+        self.__secretCount += 1
+        self.publicCount += 1
+        print (self.__secretCount)
+
+counter = JustCounter()
+counter.count()
+counter.count()
+print (counter.publicCount)
