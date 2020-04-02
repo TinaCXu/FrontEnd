@@ -1,6 +1,7 @@
 from django import forms
+from django.forms.boundfield import BoundField
 from django.contrib.auth.models import User
-from .models import UserProfileInfo
+from .models import UserProfileInfo, UserPost
 
 class RegisterForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -34,3 +35,7 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ('username','first_name','last_name','password','email')
 
+class PostForm(forms.ModelForm):
+    class Meta():
+        model = UserPost
+        fields = ('username','post','post_pic','post_time')

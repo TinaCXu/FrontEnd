@@ -1,9 +1,13 @@
 from django.shortcuts import render
 from post_app import forms
-from .models import UserProfileInfo,User
+from .models import UserProfileInfo,User,UserPost
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.forms.boundfield import BoundField
+
+
 # Create your views here.
 
 def HomeView(request):
@@ -67,7 +71,48 @@ def LoginView(request):
         if user is not None:
             # A backend authenticated the credentials
             login(request,user)
-            return HttpResponseRedirect(reverse('home'))
+            return HttpResponseRedirect(reverse('global'))
             # success page should be linked to personal page, specify it tomorrow
         return render(request,'login.html',context)
     return HttpResponse("404")
+
+# @login_required
+def PostView(request):
+    if request.method == 'GET':
+        post_form = forms.PostForm
+        context = {}
+        context['post_form'] = post_form
+        return render(request,'global_stream.html',context)
+    if request.method == 'POST':
+        #if it is post, user is submitting info by form.
+        #step 1 get the form
+        post_form = forms.PostForm(data=request.POST)
+        #step 2 see if it is valid
+        if post_form.is_valid():
+            #it is valid, store it into the database
+            Post = UserPost()
+            # Post.username = request.POST['username']
+            # Post.post = request.POST['post']
+            # Post.post_pic = request.POST['post_pic']
+            # Post.post_time = request.POST['post_time']
+            Post.username = post_form['username']
+            Post.post = post_form['post']
+            Post.post_pic = post_form['post_pic']
+            Post.post_time = post_form['post_time']
+
+            if 'post_pic' in request.FILES:
+                Post.post_pic = request.FILES['post_pic'] #dictionary of the files user uploaded in request
+
+            for boundfield in post_form:
+                print(type(boundfield.field.type))
+
+            Post.save()
+            return HttpResponse("Post success")
+        #step 3 if it is not valid, return information
+        else:
+            context = {}
+            context['post_form'] = post_form
+            return render(request,'global_stream.html',context)
+    return HttpResponse("404")
+
+
