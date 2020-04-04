@@ -38,4 +38,4 @@ class UserForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta():
         model = UserPost
-        fields = ('username','post','post_pic','post_time')
+        fields = ('post',)

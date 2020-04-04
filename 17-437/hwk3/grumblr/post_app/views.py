@@ -76,7 +76,7 @@ def LoginView(request):
         return render(request,'login.html',context)
     return HttpResponse("404")
 
-# @login_required
+@login_required
 def PostView(request):
     if request.method == 'GET':
         post_form = forms.PostForm
@@ -86,27 +86,15 @@ def PostView(request):
     if request.method == 'POST':
         #if it is post, user is submitting info by form.
         #step 1 get the form
-        post_form = forms.PostForm(data=request.POST)
+        #3 fields, post is provided by request.POST
+        # user is provided by instance post
+        # time is automatically filled.
+        post = UserPost(user=request.user)
+        post_form = forms.PostForm(data=request.POST, instance=post)
         #step 2 see if it is valid
         if post_form.is_valid():
             #it is valid, store it into the database
-            Post = UserPost()
-            # Post.username = request.POST['username']
-            # Post.post = request.POST['post']
-            # Post.post_pic = request.POST['post_pic']
-            # Post.post_time = request.POST['post_time']
-            Post.username = post_form['username']
-            Post.post = post_form['post']
-            Post.post_pic = post_form['post_pic']
-            Post.post_time = post_form['post_time']
-
-            if 'post_pic' in request.FILES:
-                Post.post_pic = request.FILES['post_pic'] #dictionary of the files user uploaded in request
-
-            for boundfield in post_form:
-                print(type(boundfield.field.type))
-
-            Post.save()
+            post_form.save()            
             return HttpResponse("Post success")
         #step 3 if it is not valid, return information
         else:
