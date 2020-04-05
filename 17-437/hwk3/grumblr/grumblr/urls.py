@@ -19,8 +19,9 @@ from post_app import views
 
 urlpatterns = [
     path('',views.HomeView,name='home'),
-    path('admin/', admin.site.urls),
     path('registration/',views.RegisterView,name='registration'),
     path('login/',views.LoginView,name='login'),
     path('global/',views.PostView,name='global'),
+    path('admin/', admin.site.urls),
+
 ]

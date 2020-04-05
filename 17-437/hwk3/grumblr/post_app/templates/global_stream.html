@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block body_block %}
     <h1>WELCOME!</h1>
-    <form method="POST">
+    <form method="POST" id="prevented">
         {% csrf_token %}
         {{ post_form.as_p }}
         <button type="submit" class="save btn btn-default">POST</button>
@@ -10,5 +11,5 @@
     </form>
 
 
-
+    <script type="text/javascript" src="{% static 'js/global_stream.js' %}"></script>
 {% endblock %}

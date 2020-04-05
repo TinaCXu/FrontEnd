@@ -87,7 +87,7 @@ def PostView(request):
         #if it is post, user is submitting info by form.
         #step 1 get the form
         #3 fields, post is provided by request.POST
-        # user is provided by instance post
+        # user is provided by instance post, use instance to add it to post_form
         # time is automatically filled.
         post = UserPost(user=request.user)
         post_form = forms.PostForm(data=request.POST, instance=post)
