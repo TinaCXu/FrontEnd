@@ -22,6 +22,7 @@ urlpatterns = [
     path('registration/',views.RegisterView,name='registration'),
     path('login/',views.LoginView,name='login'),
     path('global/',views.PostView,name='global'),
+    path('personal/',views.PersonalView,name='personal'),
     path('admin/', admin.site.urls),
-
+    path('update_post/<int:timestamp>',views.UpdatePostView,name='update_post'),
 ]

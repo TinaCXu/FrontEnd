@@ -39,3 +39,6 @@ class PostForm(forms.ModelForm):
     class Meta():
         model = UserPost
         fields = ('post',)
+        widgets = {
+            'post': forms.TextInput(attrs={'class': 'form-control', 'placeholder': "What's new today? Share with Grumblrer!"}),
+        }

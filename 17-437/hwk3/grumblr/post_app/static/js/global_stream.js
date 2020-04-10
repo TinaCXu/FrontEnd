@@ -1,28 +1,29 @@
-// prevent the defaul submit of form, using ajax
-// $().ready(function(){
-//     $('form').on('submit',function(event){
-//         event.preventDefault()
-//         alert('prevent success!')
-//     })
-//     new_post = request.POST.get
-// })
+$('h1').click(function(){
+    alert('this is global stream js')
+})
 
+// define the global time variable
+var latest_post_time = 0
 
-// $('form').submit(function(){
-//     preventDefault()
-//     new_post = request.POST.get
-//     $('button').click(function(){
-//         $.ajaxSubmit({
-//             type: "POST",
-//             url: "localhost:8000/global",
-//             data: {'new_post':new_post},
-//             datatype: "JSON",
-//             success: function(data){
-//                 alert('success!')},
-//             error: function(){
-//                 alert('fail!')},
-//             clearForm: true,
-//             resetFrom: true,
-//         })
-//     })
-// })
+function getUpdatePost() {
+    console.log("trigger getUpdatePost")
+    // $.ajax({
+    //     type: "POST",
+    //     url: "/global/",
+    //     datatype: "json",
+    //     data: {'latest_post_time': latest_post_time},
+    //     success: function(data){
+    //         console.log('time send success')
+    //     },
+    //     error: function(){
+    //         console.log('time send fail')
+    //     },
+    // })
+    $.get( "/update_post/"+latest_post_time).done(function (data) {
+        //3. get posts in json format. print them out.
+        console.log("get test pass");
+    });
+}
+$(document).ready(function(){
+    window.setInterval(getUpdatePost, 3000);
+})

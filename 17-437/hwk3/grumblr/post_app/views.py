@@ -80,17 +80,23 @@ def LoginView(request):
 def PostView(request):
     if request.method == 'GET':
         post_form = forms.PostForm
+        post_list = UserPost.objects.order_by('-post_time')
         context = {}
         context['post_form'] = post_form
+        context['post_records'] = post_list
         return render(request,'global_stream.html',context)
     if request.method == 'POST':
         #if it is post, user is submitting info by form.
         #step 1 get the form
         #3 fields, post is provided by request.POST
-        # user is provided by instance post, use instance to add it to post_form
-        # time is automatically filled.
+        # user and time is provided by instance post, use instance to add it to post_form
         post = UserPost(user=request.user)
         post_form = forms.PostForm(data=request.POST, instance=post)
+
+        # updatepost = UpdatePost()
+        # updatepost = request.POST['latest_post_time']
+        # updatepost.save()
+
         #step 2 see if it is valid
         if post_form.is_valid():
             #it is valid, store it into the database
@@ -102,5 +108,66 @@ def PostView(request):
             context['post_form'] = post_form
             return render(request,'global_stream.html',context)
     return HttpResponse("404")
+
+
+def UpdatePostView(request, timestamp):
+    print('UpdatePostView:', timestamp)
+
+    if request.method == 'GET':
+        #1. get posts newer than timestamp
+        #2. return them and newest timestamp (json format)
+
+        # {
+        #     "timestamp": 1000,
+        #     "posts":  [
+        #         {
+        #             "timestamp":xxx,
+        #             "author":xxx,
+        #             "content":xxx
+        #         },
+        #         {
+        #             ....
+        #         },
+        #         {
+        #             ....
+        #         }
+        #     ]
+        # }
+        
+        return HttpResponse("time get success")
+    return HttpResponse("404")
+
+@login_required
+def PersonalView(request):
+    if request.method == 'GET':
+        post_form = forms.PostForm
+        context = {}
+        context['post_form'] = post_form
+        return render(request,'personal.html',context)
+    if request.method == 'POST':
+        #if it is post, user is submitting info by form.
+        #step 1 get the form
+        #3 fields, post is provided by request.POST
+        # user and time is provided by instance post, use instance to add it to post_form
+        post = UserPost(user=request.user)
+        post_form = forms.PostForm(data=request.POST, instance=post)
+
+        # updatepost = UpdatePost()
+        # updatepost = request.POST['latest_post_time']
+        # updatepost.save()
+
+        #step 2 see if it is valid
+        if post_form.is_valid():
+            #it is valid, store it into the database
+            post_form.save()            
+            return HttpResponse("Post success")
+        #step 3 if it is not valid, return information
+        else:
+            context = {}
+            context['post_form'] = post_form
+            return render(request,'global_stream.html',context)
+    return HttpResponse("404")
+
+
 
 

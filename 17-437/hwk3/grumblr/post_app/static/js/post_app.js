@@ -36,6 +36,7 @@ $(document).ajaxSend(function(event, xhr, settings) {
     }
 });
 
+
 $().ready(function(){
     $('button').click(function(){
         $('#prevented').on('submit',function(event){
@@ -47,7 +48,8 @@ $().ready(function(){
             $.ajax({
                 type: "POST",
                 url: "/global/",
-                data: {'new_post':new_post},
+                // the key-'post’ must be the same key in form, otherwise it cannot be saved in database
+                data: {'post':new_post},
                 datatype: "json",
                 success: function(data){
                     alert('success!')},
