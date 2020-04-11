@@ -2,6 +2,7 @@ from django.shortcuts import render
 from post_app import forms
 from .models import UserProfileInfo,User,UserPost
 from django.http import HttpResponse, HttpResponseRedirect
+import json
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -112,29 +113,34 @@ def PostView(request):
 
 def UpdatePostView(request, timestamp):
     print('UpdatePostView:', timestamp)
-
     if request.method == 'GET':
         #1. get posts newer than timestamp
-        #2. return them and newest timestamp (json format)
+        # TODO: order?:ok
+        # TODO: gte? gt = great, gte = great or equal.
+        # TODO: max time is a string of time. check if string is time.
+        newest_posts = UserPost.objects.filter(post_time__gt=timestamp).order_by('-post_time')
+        # print(newest_post)
+        print(len(newest_posts))
+        print(newest_posts[0].user)
+        print(newest_posts[0].post)
+        print(newest_posts[0].post_time)
 
-        # {
-        #     "timestamp": 1000,
-        #     "posts":  [
-        #         {
-        #             "timestamp":xxx,
-        #             "author":xxx,
-        #             "content":xxx
-        #         },
-        #         {
-        #             ....
-        #         },
-        #         {
-        #             ....
-        #         }
-        #     ]
-        # }
-        
-        return HttpResponse("time get success")
+        newest_post_pool = []
+        for i in range(len(newest_posts)):
+            newest_post = {
+                "timestamp":str(newest_posts[i].post_time),
+                "user":newest_posts[i].user.username,
+                "post":newest_posts[i].post}
+            newest_post_pool.append(newest_post)
+        print(newest_post_pool)
+
+        #2. return them and newest timestamp (json format)
+        # TODO:last post is the newest post?
+        newest_posts={
+            "timestamp": str(newest_posts[0].post_time),
+            "posts":  newest_post_pool
+        }
+        return HttpResponse(json.dumps(newest_posts), content_type='application/json')
     return HttpResponse("404")
 
 @login_required
