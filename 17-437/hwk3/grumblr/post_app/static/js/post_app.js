@@ -37,31 +37,5 @@ $(document).ajaxSend(function(event, xhr, settings) {
 });
 
 
-$().ready(function(){
-    $('button').click(function(){
-        $('#prevented').on('submit',function(event){
-            // prevent the defaul submit of form, using ajax
-            event.preventDefault();
-            alert('prevent success!');
-            var new_post = $('#id_post').val();
-            console.log(new_post);
-            $.ajax({
-                type: "POST",
-                url: "/global/",
-                // the key-'post’ must be the same key in form, otherwise it cannot be saved in database
-                data: {'post':new_post},
-                datatype: "json",
-                success: function(data){
-                    alert('success!')},
-                error: function(){
-                    alert('fail!')},
-                clearForm: true,
-                resetFrom: true,
-            })
-        })
-    })
-})
-
-
 
 

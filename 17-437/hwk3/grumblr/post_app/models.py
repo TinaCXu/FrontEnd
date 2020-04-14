@@ -16,7 +16,7 @@ class UserPost(models.Model):
     # username = models.CharField(max_length=500, blank=False, null=False)
     post = models.TextField(max_length=42, blank=True, null=True, default="")
     # post_pic = models.ImageField(upload_to='post_pics',blank=True)
-    post_time = models.DateTimeField(default=timezone.now())
+    post_time = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return str(self.user)

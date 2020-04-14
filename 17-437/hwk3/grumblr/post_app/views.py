@@ -2,12 +2,15 @@ from django.shortcuts import render
 from post_app import forms
 from .models import UserProfileInfo,User,UserPost
 from django.http import HttpResponse, HttpResponseRedirect
-import json
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.forms.boundfield import BoundField
 
+from datetime import datetime
+from datetime import timedelta
+
+import json
 
 # Create your views here.
 
@@ -128,7 +131,7 @@ def UpdatePostView(request, timestamp):
         newest_post_pool = []
         for i in range(len(newest_posts)):
             newest_post = {
-                "timestamp":str(newest_posts[i].post_time),
+                "timestamp":(newest_posts[i].post_time+timedelta(hours=8)).strftime('%Y-%m-%d %H:%M:%S'),
                 "user":newest_posts[i].user.username,
                 "post":newest_posts[i].post}
             newest_post_pool.append(newest_post)
