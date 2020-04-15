@@ -2,40 +2,49 @@
 {% load static %}
 
 {% block body_block %}
-<div class="col-10">
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-            <div class="card w-90">
-                <div class="card-body">
-                    <form method="POST" id="prevented">
-                        {% csrf_token %}
-                        {{ post_form.as_p }}
-                        <button type="submit" class="save btn btn-primary">POST</button>
-                    </form>
-                </div>
-            </div>
-        </li>
-    </ul>
-</div>
-{% endblock %}
-
-    <div class="card" style="width: col-10;">
-        <div class="row">
-            <div class="col-2">
-                <img src="C:\Users\xucha\Documents\前端网课\17-437\hwk1\素材\user3.jpg" width="col-3" height="col-3" class="card-img-top" alt="User2">
-            </div>
-            <div class="col-10">
-            </br>
-            </br>
-                <div class="col-11">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" maxlength="42" placeholder="What's new today? Share with Grumblrer!" aria-label="Post" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <span class="input-group-text" id="basic-addon2">Post</span>
-                        </div>
+<div class="row">
+    <div class="col-10">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <div class="card w-90">
+                    <div class="card-body">
+                        <form method="POST" id="prevented">
+                            {% csrf_token %}
+                            {{ post_form.as_p }}
+                            <button type="submit" class="save btn btn-primary">POST</button>
+                        </form>
                     </div>
                 </div>
-                <div class="col-1"></div>
-            </div>
-        </div>
+            </li>            
+        </ul>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <div class="card w-90">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ posts.user }}</h5>
+                        <p class="card-text">Self introduction.</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul class="list-group list-group-flush">
+            {% for posts in post_records %}
+            <li class="list-group-item">{{ posts.post }}
+              <p class="card-text text-right"><small class="text-muted">{{ posts.post_time|date:"Y-m-d H:i:s" }}</small></p>
+            </li>
+            {% endfor %}
+        </ul>
+    <div>
+    <div class="col-2">
+        <h1 class="display-4 font-italic">User A</h1>
+    </div>
+        
+    </div>
+    
+    <div class="col-10">
+        <ul class="list-group list-group-flush" id="postPool">
+    </div>
+    
+</div>
 
+{% endblock %}

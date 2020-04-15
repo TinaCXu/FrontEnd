@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from post_app import forms
 from .models import UserProfileInfo,User,UserPost
 from django.http import HttpResponse, HttpResponseRedirect
@@ -121,38 +121,56 @@ def UpdatePostView(request, timestamp):
         # TODO: order?:ok
         # TODO: gte? gt = great, gte = great or equal.
         # TODO: max time is a string of time. check if string is time.
-        newest_posts = UserPost.objects.filter(post_time__gt=timestamp).order_by('-post_time')
-        # print(newest_post)
-        print(len(newest_posts))
-        print(newest_posts[0].user)
-        print(newest_posts[0].post)
-        print(newest_posts[0].post_time)
+        existing_posts = UserPost.objects.order_by('-post_time')
+        print(str(existing_posts[0].post_time))
+        print(type(existing_posts[0].post_time))
 
-        newest_post_pool = []
-        for i in range(len(newest_posts)):
-            newest_post = {
-                "timestamp":(newest_posts[i].post_time+timedelta(hours=8)).strftime('%Y-%m-%d %H:%M:%S'),
-                "user":newest_posts[i].user.username,
-                "post":newest_posts[i].post}
-            newest_post_pool.append(newest_post)
-        print(newest_post_pool)
+        print(timestamp)
+        print(type(timestamp))
 
-        #2. return them and newest timestamp (json format)
-        # TODO:last post is the newest post?
-        newest_posts={
-            "timestamp": str(newest_posts[0].post_time),
-            "posts":  newest_post_pool
-        }
-        return HttpResponse(json.dumps(newest_posts), content_type='application/json')
+        if str(existing_posts[0].post_time) == timestamp:
+            newest_posts={
+                "timestamp": timestamp,
+                "posts": "" 
+            }
+            return HttpResponse(json.dumps(newest_posts), content_type='application/json')
+        else:
+            newest_posts = UserPost.objects.filter(post_time__gt=timestamp).order_by('-post_time')
+            # print(newest_post)
+            print(len(newest_posts))
+            print(newest_posts[0].user)
+            print(newest_posts[0].post)
+            print(newest_posts[0].post_time)
+
+            newest_post_pool = []
+            for i in range(len(newest_posts)):
+                newest_post = {
+                    "timestamp":(newest_posts[i].post_time+timedelta(hours=8)).strftime('%Y-%m-%d %H:%M:%S'),
+                    "user":newest_posts[i].user.username,
+                    "post":newest_posts[i].post}
+                newest_post_pool.append(newest_post)
+            print(newest_post_pool)
+
+            #2. return them and newest timestamp (json format)
+            # TODO:last post is the newest post?
+            newest_posts={
+                "timestamp": str(newest_posts[0].post_time),
+                "posts":  newest_post_pool
+            }
+            return HttpResponse(json.dumps(newest_posts), content_type='application/json')
     return HttpResponse("404")
 
 @login_required
-def PersonalView(request):
+def PersonalView(request,username):
+    print('UpdatePersonalView:', username)
     if request.method == 'GET':
         post_form = forms.PostForm
+        post_list = get_object_or_404(UserPost,pk=username).order_by('-post_time')
         context = {}
         context['post_form'] = post_form
+        context['post_records'] = post_list
         return render(request,'personal.html',context)
+
     if request.method == 'POST':
         #if it is post, user is submitting info by form.
         #step 1 get the form

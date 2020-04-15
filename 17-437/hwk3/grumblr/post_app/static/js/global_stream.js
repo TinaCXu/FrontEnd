@@ -65,7 +65,7 @@ function getUpdatePost() {
                         +'<div class="container">'
                             +'<div class="row">'
                                 +'<div class="col-2">'
-                                    +'<a href="#">'
+                                    +'<a href="{%url 'personal' username=new_post["user"]}">'
                                         +'<img src="C:\Users\\xucha\Documents\前端网课\17-437\hwk1\素材\\user3.jpg" width="col-3" height="col-3" class="card-img-top" alt="User2">'
                                     +'</a>'
                                 +'</div>'
