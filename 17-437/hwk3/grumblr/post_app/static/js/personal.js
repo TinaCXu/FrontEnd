@@ -1,9 +1,4 @@
-$('h1').click(function(){
-    alert('this is global stream js')
-})
-
 var cnt = 0;
-//$().ready(function(){
    $('button').click(function(){
         $('#prevented').unbind().on('submit',function(event){
             // prevent the defaul submit of form, using ajax
@@ -23,24 +18,18 @@ var cnt = 0;
                     console.log('success!')},
                 error: function(){
                     console.log('fail!')},
-                // clearForm: true,
-                // resetFrom: true,
             })
         })
    })
-// })
 
 // define the global time variable
 var latest_post_time = "1970-01-01 00:00:00"
+var target_user = $('#target_user').val()
+console.log(target_user)
 
 function getUpdatePost() {
     console.log("trigger getUpdatePost")
-    // $.ajax({
-    //     type: "POST",
-    //     url: "/update_post/"+latest_post_time,
-    //     datatype: "json",
-    // })
-    $.get( "/update_post/"+latest_post_time).done(function (data) {
+    $.get( "/update_personal/"+target_user+latest_post_time).done(function (data) {
         //3. get posts in json format. print them out.
         //https://stackoverflow.com/questions/42570854/how-to-output-json-array-value-in-ajax-success
         console.log(data);
@@ -51,35 +40,16 @@ function getUpdatePost() {
         latest_post = data.posts;
         console.log(latest_post_time)
         console.log(latest_post)
+        console.log(latest_post[0].user_id)
         
 
         var post_html = "";
         for (var i = 0; i<latest_post.length; i++){
             var new_post = latest_post[i];
             post_html +=
-                '<li class="list-group-item">'
-                +'<div class="card w-90">' 
-                    +'<div class="card-body">'
-                        +'<a href=http://127.0.0.1:8000/personal/'+ new_post["user_id"]+'>'
-                            +'<h5 class="card-title">'+new_post["user"]+'</h5>'
-                        +'</a>'
-                        +'<div class="container">'
-                            +'<div class="row">'
-                                +'<div class="col-2">'
-                                    +'<a href="#">'
-                                        +'<img src="C:\Users\\xucha\Documents\前端网课\17-437\hwk1\素材\\user3.jpg" width="col-3" height="col-3" class="card-img-top" alt="User2">'
-                                    +'</a>'
-                                +'</div>'
-                                +'<div class="col-10">'
-                                    +new_post["post"]
-                                +'</div>'
-                            +'</div>'
-                        +'</div>'
-                        +'<p class="card-text text-right"><small class="text-muted" id="postTime">'+ new_post["timestamp"]+ '</small></p>'
-                    +'</div>'
-                +'</div>'
-            +'</li>'
-        };
+                '<li class="list-group-item">'+ new_post["post"]
+                    +'<p class="card-text text-right"><small class="text-muted">'+new_post["timestamp"]}+'</small></p>'
+                +'</li>'
         console.log(post_html)
         $("#postPool").prepend(post_html);
     });

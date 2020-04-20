@@ -3,7 +3,7 @@ from post_app import forms
 from .models import UserProfileInfo,User,UserPost
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.forms.boundfield import BoundField
 
@@ -45,10 +45,15 @@ def RegisterView(request):
             user.email = register_form.cleaned_data['email']
             user.set_password(user.password) #hashing the password
 
-            user_profile = UserProfileInfo()
-            user_profile.introduction = register_form.cleaned_data['introduction']
+            # u = User.objects.get(username=user.username)
+            # user_profile.introduction
 
             user.save()
+
+            user_profile = UserProfileInfo()
+            user_profile.introduction = register_form.cleaned_data['introduction']
+            user_profile.user = user
+            user_profile.save()
             return HttpResponse("register success")
         #step 3 if it is not valid, return information
         else:
@@ -79,6 +84,11 @@ def LoginView(request):
             # success page should be linked to personal page, specify it tomorrow
         return render(request,'login.html',context)
     return HttpResponse("404")
+
+@login_required
+def logoutView(request):
+    logout(request)
+    return render(request,'home.html')
 
 @login_required
 def PostView(request):
@@ -138,16 +148,20 @@ def UpdatePostView(request, timestamp):
             newest_posts = UserPost.objects.filter(post_time__gt=timestamp).order_by('-post_time')
             # print(newest_post)
             print(len(newest_posts))
+            print(newest_posts)
             print(newest_posts[0].user)
             print(newest_posts[0].post)
             print(newest_posts[0].post_time)
+            print(newest_posts[0].user.id)
 
             newest_post_pool = []
             for i in range(len(newest_posts)):
                 newest_post = {
                     "timestamp":(newest_posts[i].post_time+timedelta(hours=8)).strftime('%Y-%m-%d %H:%M:%S'),
                     "user":newest_posts[i].user.username,
-                    "post":newest_posts[i].post}
+                    "post":newest_posts[i].post,
+                    "user_id":str(newest_posts[i].user.id),
+                    }
                 newest_post_pool.append(newest_post)
             print(newest_post_pool)
 
@@ -161,14 +175,26 @@ def UpdatePostView(request, timestamp):
     return HttpResponse("404")
 
 @login_required
-def PersonalView(request,username):
-    print('UpdatePersonalView:', username)
+def PersonalView(request,userID):
+    print('UpdatePersonalView:', userID)
     if request.method == 'GET':
+        target_user = User.objects.get(id=userID)
+        target_user_first_name = target_user.first_name
+        target_user_last_name =target_user.last_name
+
         post_form = forms.PostForm
-        post_list = get_object_or_404(UserPost,pk=username).order_by('-post_time')
+        post_list = UserPost.objects.filter(user=target_user).order_by('-post_time')
+        introduction = get_object_or_404(UserProfileInfo,user=target_user).introduction       
+        print(introduction)
+        print(request.user.id)
+
         context = {}
         context['post_form'] = post_form
         context['post_records'] = post_list
+        context['user_name'] = post_list[0].user
+        context['user_introduction'] = introduction
+        context['first_name'] = target_user_first_name
+        context['last_name'] = target_user_last_name
         return render(request,'personal.html',context)
 
     if request.method == 'POST':
@@ -195,6 +221,51 @@ def PersonalView(request,username):
             return render(request,'global_stream.html',context)
     return HttpResponse("404")
 
+def UpdatePersonalView(request, target_user, timestamp):
+    print('UpdatePostView:', timestamp)
+    if request.method == 'GET':
+        existing_posts = UserPost.objects.filter(user=target_user).order_by('-post_time')
+        print(str(existing_posts[0].post_time))
+        print(type(existing_posts[0].post_time))
+
+        print(timestamp)
+        print(type(timestamp))
+
+        if str(existing_posts[0].post_time) == timestamp:
+            newest_posts={
+                "timestamp": timestamp,
+                "posts": "" 
+            }
+            return HttpResponse(json.dumps(newest_posts), content_type='application/json')
+        else:
+            newest_posts = UserPost.objects.filter(user=target_user,post_time__gt=timestamp).order_by('-post_time')
+            # print(newest_post)
+            print(len(newest_posts))
+            print(newest_posts)
+            print(newest_posts[0].user)
+            print(newest_posts[0].post)
+            print(newest_posts[0].post_time)
+            print(newest_posts[0].user.id)
+
+            newest_post_pool = []
+            for i in range(len(newest_posts)):
+                newest_post = {
+                    "timestamp":(newest_posts[i].post_time+timedelta(hours=8)).strftime('%Y-%m-%d %H:%M:%S'),
+                    # "user":newest_posts[i].user.username,
+                    "post":newest_posts[i].post,
+                    # "user_id":str(newest_posts[i].user.id),
+                    }
+                newest_post_pool.append(newest_post)
+            print(newest_post_pool)
+
+            #2. return them and newest timestamp (json format)
+            # TODO:last post is the newest post?
+            newest_posts={
+                "timestamp": str(newest_posts[0].post_time),
+                "posts":  newest_post_pool
+            }
+            return HttpResponse(json.dumps(newest_posts), content_type='application/json')
+    return HttpResponse("404")
 
 
 
