@@ -23,13 +23,17 @@ var cnt = 0;
    })
 
 // define the global time variable
-var latest_post_time = "1970-01-01 00:00:00"
-var target_user = $('#target_user').val()
-console.log(target_user)
+var latest_post_time = "1970-01-01 00:00:00";
+var target_user = $('.card-title').attr('username_id');
+console.log(target_user);
 
-function getUpdatePost() {
+var pathname = String(window.location.pathname);
+var url_user_id = pathname.replace('/personal/','');
+console.log(url_user_id);
+
+function getUpdatePost(){
     console.log("trigger getUpdatePost")
-    $.get( "/update_personal/"+target_user+latest_post_time).done(function (data) {
+    $.get( "/update_personal/"+url_user_id+"/"+latest_post_time).done(function(data){
         //3. get posts in json format. print them out.
         //https://stackoverflow.com/questions/42570854/how-to-output-json-array-value-in-ajax-success
         console.log(data);
@@ -38,19 +42,19 @@ function getUpdatePost() {
         console.log("get test pass");
         latest_post_time = data.timestamp;
         latest_post = data.posts;
-        console.log(latest_post_time)
-        console.log(latest_post)
-        console.log(latest_post[0].user_id)
-        
+        console.log(latest_post_time);
+        console.log(latest_post);
+        // console.log(latest_post[0].user_id)
 
-        var post_html = "";
+        var post_html = '';
         for (var i = 0; i<latest_post.length; i++){
             var new_post = latest_post[i];
             post_html +=
                 '<li class="list-group-item">'+ new_post["post"]
-                    +'<p class="card-text text-right"><small class="text-muted">'+new_post["timestamp"]}+'</small></p>'
+                    +'<p class="card-text text-right"><small class="text-muted">'+new_post["timestamp"]+'</small></p>'
                 +'</li>'
-        console.log(post_html)
+        };
+        console.log(post_html);
         $("#postPool").prepend(post_html);
     });
 }
