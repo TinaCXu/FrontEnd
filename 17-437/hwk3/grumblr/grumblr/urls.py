@@ -26,5 +26,8 @@ urlpatterns = [
     path('update_post/<str:timestamp>',views.UpdatePostView,name='update_post'),
     path('update_personal/<str:target_user>/<str:timestamp>', views.UpdatePersonalView,name='update_personal'),
     path('personal/<str:userID>',views.PersonalView,name='personal'),
+    path('personal_profile',views.PersonalProfileView,name='personal_profile'),
+    path('personal_profile/update/',views.PersonalProfileFormView,name='personal_form'),
+    path('personal_profile/update/<str:userID>',views.PersonalProfileUpdateView,name='personal_update'),
     path('admin/', admin.site.urls),
 ]

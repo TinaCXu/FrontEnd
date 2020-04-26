@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body_block %}
+<div class="col-10">
+    <form method="POST" user_id="{{ user_id }}">
+        {% csrf_token %}
+        {{ profile_form.as_p }}
+        <div class="form-group row">
+            <button type="submit" class="save btn btn-primary btn-lg btn-block">Change Profile</button>
+        </div>
+    </form>    
+</div>
+<div class="col-10">
+    <form method="POST" user_id="{{ user_id }}">
+        {% csrf_token %}
+        {{ password_form.as_p }}
+        <div class="form-group row">
+            <button type="submit" class="save btn btn-primary btn-lg btn-block">Change Password</button>
+        </div>
+    </form>    
+</div>
+
+{% endblock %}
+
+{% block js_block %}
+<script type="text/javascript" src="{% static 'js/personal_update.js' %}"></script>
+{% endblock %}

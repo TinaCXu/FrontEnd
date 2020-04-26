@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body_block %}
+
+<h1>Hello! This is personal profile!</h1>
+<ul class="list-group list-group-flush">
+    <li class="list-group-item">
+        <div class="card w-90">
+            <div class="card-body">
+                <p class="card-text">First Name: {{ first_name }}</p>
+                <p class="card-text">Last Name: {{ last_name }}</p>
+                <p class="card-text">Age: {{ age }}</p>
+                <p class="card-text">Introduction: {{ introduction }}</p>
+                <p class="card-text">Password: {{ password }}</p>
+
+            </div>
+        </div>
+    </li>
+</ul>
+<button type="submit" class="save btn btn-primary">Change Personal Profile</button>
+
+
+{% endblock %}

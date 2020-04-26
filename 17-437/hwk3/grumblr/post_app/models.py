@@ -7,7 +7,8 @@ from django.utils import timezone
 
 class UserProfileInfo(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE, default=None)
-    introduction = models.TextField(max_length=500, blank=False, null=True, default='INTRODUCTION')
+    introduction = models.TextField(max_length=420, blank=False, null=True, default='INTRODUCTION')
+    age = models.CharField(max_length=3, blank=False, null=False, default=None)
     def __str__(self):
         return str(self.user)
 

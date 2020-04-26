@@ -10,7 +10,9 @@ class RegisterForm(forms.Form):
     email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     password = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     verify_password = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    age = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
     introduction = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control input-sm'}))
+
 
     def clean(self):
         #super(RegistrationForm, self).clean()
@@ -42,3 +44,16 @@ class PostForm(forms.ModelForm):
         widgets = {
             'post': forms.TextInput(attrs={'class': 'form-control', 'placeholder': "What's new today? Share with Grumblrer!"}),
         }
+
+class PersonalProfileForm(forms.Form):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    age = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    introduction = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control input-sm'}))
+
+class PersonalPasswordForm(forms.Form):
+    old_password = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    new_password = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    verify_new_password = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))

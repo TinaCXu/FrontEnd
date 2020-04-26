@@ -52,6 +52,7 @@ def RegisterView(request):
 
             user_profile = UserProfileInfo()
             user_profile.introduction = register_form.cleaned_data['introduction']
+            user_profile.age = register_form.cleaned_data['age']
             user_profile.user = user
             user_profile.save()
             return HttpResponse("register success")
@@ -266,6 +267,57 @@ def UpdatePersonalView(request, target_user, timestamp):
             }
             return HttpResponse(json.dumps(newest_posts), content_type='application/json')
     return HttpResponse("404")
+
+@login_required
+def PersonalProfileView(request):
+    if request.method == 'GET':
+        personal_profile = UserProfileInfo.objects.get(user=request.user)
+        print(personal_profile)
+        print(personal_profile.introduction)
+        print(personal_profile.age)
+
+        context = {}
+        context['first_name'] = request.user.first_name
+        context['last_name'] = request.user.last_name
+        context['age'] = personal_profile.age
+        context['introduction'] = personal_profile.introduction
+        context['password'] = request.user.password
+
+        return render(request,'personal_profile.html',context)
+    if request.method == 'POST':
+        return render(request,'personal_update.html')
+
+@login_required
+# static part for personal profile
+def PersonalProfileFormView(request):
+    if request.method == 'GET':
+        # prepate the form skelton for html
+        profile_form = forms.PersonalProfileForm()
+        password_form = forms.PersonalPasswordForm()
+        context = {}
+        context['profile_form'] = profile_form
+        context['password_form'] = password_form
+        context['user_id'] = request.user.id
+
+    return render(request,'personal_update.html',context)
+
+@login_required
+# dynamic part for personal profile
+def PersonalProfileUpdateView(request, userID):
+    if request.method == 'GET':
+        # prepare the initial form data for user
+        personal_profile = UserProfileInfo.objects.get(user=request.user)
+        personal_data = {
+            "username":request.user.username,
+            "first_name":request.user.first_name,
+            "last_name":request.user.last_name,
+            "email":request.user.email,
+            "age":personal_profile.age,
+            "introduction":personal_profile.introduction,
+        }
+        print(personal_data)
+        # return the data to frontend
+        return HttpResponse(json.dumps(personal_data), content_type='application/json')
 
 
 
