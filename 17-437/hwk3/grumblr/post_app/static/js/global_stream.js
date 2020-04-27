@@ -6,7 +6,7 @@ var cnt = 0;
 //$().ready(function(){
    $('button').click(function(){
         $('#prevented').unbind().on('submit',function(event){
-            // prevent the defaul submit of form, using ajax
+            // prevent the default submit of form, using ajax
             cnt += 1;
             console.log(cnt);
             event.preventDefault();

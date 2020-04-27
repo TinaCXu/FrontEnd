@@ -298,8 +298,33 @@ def PersonalProfileFormView(request):
         context['profile_form'] = profile_form
         context['password_form'] = password_form
         context['user_id'] = request.user.id
+        return render(request,'personal_update.html',context)
+    if request.method == 'POST':
+        print(request.POST)
+        print(type(request.POST))
+        #two types of post, one is submitting PersonalProfileForm, one is submitting PersonalPasswordForm
+        if 'first_name' in request.POST:
+            updated_profie = forms.PersonalProfileForm(request.POST)
+            print(updated_profie)
+            if updated_profie.is_valid():
+                # 3 fields should be saved in model User, 2 fields should be saved in model UserProfileInfo
+                # updateUser_user = User.objects.get(user=request.user)
+                # print(updateUser_user)
+                # updateUser_user.first_name =  updated_profie['first_name']
+                # updateUser_user.last_name =  updated_profie['last_name']
+                # updateUser_user.email =  updated_profie['email']
+                # updateUser_user.save(update_fields=['first_name','last_name','email'])
 
-    return render(request,'personal_update.html',context)
+                user_profile = UserProfileInfo.objects.get(user=request.user)
+                print(user_profile)
+                user_profile.introduction = updated_profie['introduction']
+                user_profile.age = updated_profie['age']
+                user_profile.save(update_fields=['introduction','age'])
+                return HttpResponse("profile update success")
+            else:
+                return HttpResponse("profile update fail")
+        # elif 
+
 
 @login_required
 # dynamic part for personal profile
