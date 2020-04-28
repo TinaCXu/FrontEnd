@@ -31,7 +31,7 @@ var cnt = 0
         cnt += 1;
         console.log(cnt);
         event.preventDefault();
-        console.log('prevent success!');
+        console.log('prevent profile post success!');
 
         var first_name_updated = $('#id_first_name').val();
         var last_name_updated = $('#id_last_name').val();
@@ -64,4 +64,37 @@ var cnt = 0
                 console.log('data submit fail!')},
         })
     })
-// })
+
+// add listener to post action from password form
+$('#password_form').unbind().on('submit',function(event){
+    // prevent the default submit of form, using ajax
+        cnt += 1;
+        console.log(cnt);
+        event.preventDefault();
+        console.log('prevent password post success!');
+
+        var old_password = $('#id_old_password').val();
+        var new_password = $('#id_new_password').val();
+        var verify_new_password = $('#id_verify_new_password').val();
+        console.log(old_password);
+        console.log(new_password);
+        console.log(verify_new_password);
+
+        $.ajax({
+            type: "POST",
+            url: "/personal_profile/update/",
+            // the key-'post’ must be the same key in form, otherwise it cannot be saved in database
+            data: {'old_password':old_password,
+                    'new_password':new_password,
+                    'verify_new_password':verify_new_password,
+                },
+            datatype: "json",
+            success: function(data){
+                // this data is the data return by backend
+                console.log(data)
+                console.log('password submit success!')},
+            error: function(data){
+                console.log(data)
+                console.log('password submit fail!')},
+        })
+    })

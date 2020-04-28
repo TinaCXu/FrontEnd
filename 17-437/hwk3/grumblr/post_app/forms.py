@@ -1,15 +1,15 @@
 from django import forms
 from django.forms.boundfield import BoundField
 from django.contrib.auth.models import User
-from .models import UserProfileInfo, UserPost
+from .models import UserProfileInfo, UserPost, UserPics
 
 class RegisterForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    password = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    verify_password = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    verify_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     age = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
     introduction = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control input-sm'}))
 
@@ -53,6 +53,11 @@ class PersonalProfileForm(forms.Form):
     introduction = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control input-sm'}))
 
 class PersonalPasswordForm(forms.Form):
-    old_password = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    new_password = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    verify_new_password = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    new_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    verify_new_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
+class UserPicsForm(forms.ModelForm):
+    class Meta():
+        model = UserPics
+        fields = ('profile_pic',)

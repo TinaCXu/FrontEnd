@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from post_app import forms
-from .models import UserProfileInfo,User,UserPost
+from .models import UserProfileInfo, User, UserPost, UserPics
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.decorators import login_required
 from django.forms.boundfield import BoundField
 
@@ -272,6 +273,7 @@ def UpdatePersonalView(request, target_user, timestamp):
 def PersonalProfileView(request):
     if request.method == 'GET':
         personal_profile = UserProfileInfo.objects.get(user=request.user)
+        user_pics = UserPics.objects.get(user=request.user)
         print(personal_profile)
         print(personal_profile.introduction)
         print(personal_profile.age)
@@ -281,7 +283,7 @@ def PersonalProfileView(request):
         context['last_name'] = request.user.last_name
         context['age'] = personal_profile.age
         context['introduction'] = personal_profile.introduction
-        context['password'] = request.user.password
+        context['profile_pic'] = user_pics.profile_pic
 
         return render(request,'personal_profile.html',context)
     if request.method == 'POST':
@@ -294,36 +296,64 @@ def PersonalProfileFormView(request):
         # prepate the form skelton for html
         profile_form = forms.PersonalProfileForm()
         password_form = forms.PersonalPasswordForm()
+        profile_pic_form = forms.UserPicsForm()
         context = {}
         context['profile_form'] = profile_form
         context['password_form'] = password_form
+        context['profile_pic_form'] = profile_pic_form
         context['user_id'] = request.user.id
+
         return render(request,'personal_update.html',context)
     if request.method == 'POST':
-        print(request.POST)
-        print(type(request.POST))
-        #two types of post, one is submitting PersonalProfileForm, one is submitting PersonalPasswordForm
+        #three types of post, one is submitting PersonalProfileForm, one is submitting PersonalPasswordForm, one is submitting UserPicsForm
         if 'first_name' in request.POST:
+            print(request.POST)
+            print(type(request.POST))
             updated_profie = forms.PersonalProfileForm(request.POST)
-            print(updated_profie)
             if updated_profie.is_valid():
                 # 3 fields should be saved in model User, 2 fields should be saved in model UserProfileInfo
-                # updateUser_user = User.objects.get(user=request.user)
-                # print(updateUser_user)
-                # updateUser_user.first_name =  updated_profie['first_name']
-                # updateUser_user.last_name =  updated_profie['last_name']
-                # updateUser_user.email =  updated_profie['email']
-                # updateUser_user.save(update_fields=['first_name','last_name','email'])
+                updateUser_user = request.user
+                print(updateUser_user)
+                updateUser_user.first_name =  request.POST['first_name']
+                updateUser_user.last_name =  request.POST['last_name']
+                updateUser_user.email =  request.POST['email']
+                updateUser_user.save(update_fields=['first_name','last_name','email'])
 
                 user_profile = UserProfileInfo.objects.get(user=request.user)
                 print(user_profile)
-                user_profile.introduction = updated_profie['introduction']
-                user_profile.age = updated_profie['age']
+                user_profile.introduction = request.POST['introduction']
+                user_profile.age = request.POST['age']
                 user_profile.save(update_fields=['introduction','age'])
                 return HttpResponse("profile update success")
             else:
                 return HttpResponse("profile update fail")
-        # elif 
+        if 'old_password' in request.POST:
+            print(request.POST)
+            print(type(request.POST))
+            updated_password = forms.PersonalPasswordForm(request.POST)
+            if updated_password.is_valid():
+                # step1:check old password is matched
+                database_password = request.user.password #ciphertext
+                old_password = request.POST['old_password'] #plaintext
+                if check_password(old_password, database_password):
+                    # step2:check new passwords are matched
+                    new_password = request.POST['new_password']
+                    verify_new_password = request.POST['verify_new_password']
+                    if new_password == verify_new_password:
+                        updateUser_user = request.user
+                        updateUser_user.password =  new_password
+                        updateUser_user.set_password(updateUser_user.password) #hashing the password
+                        updateUser_user.save(update_fields=['password'])
+                        return HttpResponse("Password update success!")
+                    else:
+                        return HttpResponse("Please make sure new password match")
+                else:
+                    return HttpResponse("Please make sure the old password match!")
+        if 'profile_pic' in request.FILES:
+            user_pics = UserPics.objects.get(user=request.user)
+            user_pics.profile_pic = request.FILES['profile_pic']
+            user_pics.save(update_fields=['profile_pic'])
+            return HttpResponse("profile pic update success")
 
 
 @login_required

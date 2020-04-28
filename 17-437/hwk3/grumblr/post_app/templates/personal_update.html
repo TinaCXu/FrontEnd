@@ -9,15 +9,25 @@
         <button type="submit" class="save btn btn-primary btn-lg btn-block" name="profilebutton">Change Profile</button>
     </form>    
 </div>
-<!-- <div class="col-10">
-    <form method="POST" user_id="{{ user_id }}">
+<div class="col-10">
+    <form method="POST" user_id="{{ user_id }}" id="password_form">
         {% csrf_token %}
         {{ password_form.as_p }}
         <div class="form-group row">
             <button type="submit" class="save btn btn-primary btn-lg btn-block">Change Password</button>
         </div>
     </form>    
-</div> -->
+</div>
+<div class="col-10">
+    <form method="POST" user_id="{{ user_id }}" id="profile_pic_form" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ profile_pic_form.as_p }}
+        <div class="form-group row">
+            <button type="submit" class="save btn btn-primary btn-lg btn-block">Change Profile Pic</button>
+        </div>
+    </form>    
+</div>
+
 
 {% endblock %}
 
