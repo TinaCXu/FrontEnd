@@ -1,12 +1,13 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from .models import UserProfileInfo, UserPost, UserPics
+from .models import UserProfileInfo, UserPost, UserPics, Follow
 
 # Register your models here.
 admin.site.register(UserProfileInfo)
 admin.site.register(UserPost)
 admin.site.register(UserPics)
+admin.site.register(Follow)
 
 # Define an inline admin descriptor for Employee model
 # which acts a bit like a singleton

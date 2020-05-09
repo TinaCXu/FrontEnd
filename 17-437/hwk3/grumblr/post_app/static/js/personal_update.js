@@ -57,10 +57,12 @@ var cnt = 0
             datatype: "json",
             success: function(data){
                 // this data is the data return by backend
-                console.log(data)
+                console.log(data),
+                alert(data),
                 console.log('data submit success!')},
             error: function(data){
-                console.log(data)
+                console.log(data),
+                alert(data),
                 console.log('data submit fail!')},
         })
     })
@@ -91,10 +93,42 @@ $('#password_form').unbind().on('submit',function(event){
             datatype: "json",
             success: function(data){
                 // this data is the data return by backend
-                console.log(data)
+                console.log(data),
+                alert(data),
                 console.log('password submit success!')},
             error: function(data){
-                console.log(data)
+                console.log(data),
+                alert(data),
+                console.log('password submit fail!')},
+        })
+    })
+
+// add listener to post action from profile pic form
+$('#profile_pic_form').unbind().on('submit',function(event){
+    // prevent the default submit of form, using ajax
+        cnt += 1;
+        console.log(cnt);
+        event.preventDefault();
+        console.log('prevent profile_pic post success!');
+
+        var profile_pic = $('#id_profile_pic').val();
+        console.log(profile_pic);
+
+        $.ajax({
+            type: "POST",
+            url: "/personal_profile/update/",
+            // the key-'post’ must be the same key in form, otherwise it cannot be saved in database
+            data: {'profile_pic':profile_pic,
+                },
+            datatype: "json",
+            success: function(data){
+                // this data is the data return by backend
+                console.log(data),
+                alert(data),
+                console.log('password submit success!')},
+            error: function(data){
+                console.log(data),
+                alert(data),
                 console.log('password submit fail!')},
         })
     })

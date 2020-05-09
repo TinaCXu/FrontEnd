@@ -1,12 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from post_app import forms
-from .models import UserProfileInfo, User, UserPost, UserPics
-from django.http import HttpResponse, HttpResponseRedirect
+from .models import UserProfileInfo, User, UserPost, UserPics, Follow
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.decorators import login_required
 from django.forms.boundfield import BoundField
+from django.core import serializers
 
 from datetime import datetime
 from datetime import timedelta
@@ -277,6 +278,7 @@ def PersonalProfileView(request):
         print(personal_profile)
         print(personal_profile.introduction)
         print(personal_profile.age)
+        print(user_pics.profile_pic)
 
         context = {}
         context['first_name'] = request.user.first_name
@@ -287,7 +289,7 @@ def PersonalProfileView(request):
 
         return render(request,'personal_profile.html',context)
     if request.method == 'POST':
-        return render(request,'personal_update.html')
+        return HttpResponseRedirect('/personal_profile/update/')
 
 @login_required
 # static part for personal profile
@@ -374,5 +376,35 @@ def PersonalProfileUpdateView(request, userID):
         # return the data to frontend
         return HttpResponse(json.dumps(personal_data), content_type='application/json')
 
+@login_required
+def FollowView(request, to_user):
+    if request.method == 'POST':
+        current_follow_status = Follow.objects.filter(follower=request.user, followed=to_user).all()
+        # if follow
+        if current_follow_status == False:
+            follow_status = Follow()
+            follow_status.follower = request.user
+            follow_status.followed = to_user
+            follow_status.save()
+            return HttpResponse("Follow Success!")
+        # if unfollow
+        if current_follow_status == True:
+            current_follow_status.delete()
+            return HttpResponse("Unfollow Success!")
 
+def UserFollowedView(request):
+    if request.method == 'GET':
+        followeders = Follow.objects.filter(follower=request.user).all()
+        print(followeders)
+        followed_list = []
+        for followder in followeders:
+            followed_list.append(str(followder.followed))
+        print(followed_list)
+        user_followed = {
+            "followeder":followed_list
+        }
+        print(user_followed)
+        # return HttpResponse(followed_list)
+        # return JsonResponse(user_followed)
+        return HttpResponse(json.dumps(user_followed), content_type='application/json')
 

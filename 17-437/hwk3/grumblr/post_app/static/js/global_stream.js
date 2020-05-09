@@ -52,7 +52,6 @@ function getUpdatePost() {
         console.log(latest_post_time)
         console.log(latest_post)
         
-
         var post_html = "";
         for (var i = 0; i<latest_post.length; i++){
             var new_post = latest_post[i];
@@ -61,8 +60,8 @@ function getUpdatePost() {
                 +'<div class="card w-90">' 
                     +'<div class="card-body">'
                         +'<a href=http://127.0.0.1:8000/personal/'+ new_post["user_id"]+'>'
-                            +'<h5 class="card-title">'+new_post["user"]+'</h5>'
-                        +'</a>'
+                            +'<h5 class="card-title" username_id='+new_post["user"]+'>'+new_post["user"]+'</h5>'
+                            +'</a>'
                         +'<div class="container">'
                             +'<div class="row">'
                                 +'<div class="col-2">'
@@ -87,4 +86,22 @@ function getUpdatePost() {
 
 $(document).ready(function(){
     window.setInterval(getUpdatePost, 3000);
+})
+
+$('#follow').click(function(){
+    alert('You click the follow button!')
+    // var to_user = $('#follow').prev().children().attr('username_id');
+    // console.log(to_user);
+    // $.ajax({
+    //     type: "POST",
+    //     url: "/follow/",
+    //     data: {'to_user':to_user},
+    //     datatype: "json",
+    //     success: function(data){
+    //         console.log(data)
+    //         console.log('success!')},
+    //     error: function(){
+    //         console.log(data)
+    //         console.log('fail!')},
+    // })
 })

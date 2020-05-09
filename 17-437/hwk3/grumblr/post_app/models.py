@@ -24,6 +24,17 @@ class UserPost(models.Model):
 
 class UserPics(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE, default=None)
-    profile_pic = models.ImageField(upload_to='profile_pics',blank=True)
+    profile_pic = models.ImageField(upload_to='profile_pics',blank=True,default='profile_pics/default.jpg')
     def __str__(self):
         return str(self.user)
+
+class Follow(models.Model):
+    follower = models.ForeignKey(User, related_name='follower', on_delete=models.CASCADE)
+    followed = models.ForeignKey(User, related_name='followed', on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-date',)
+    
+    def __str__(self):
+        return f'{self.follower} follow {self.followed}'

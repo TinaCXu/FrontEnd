@@ -59,6 +59,39 @@ function getUpdatePost(){
     });
 }
 
+// decide follow or unfollow button
+function buttonType(){
+    console.log("trigger buttonType")
+    $.get( "/user_followed/").done(function(data){
+        console.log(data);
+        console.log(typeof(data));
+        console.log(data["followeder"]);
+        console.log(typeof(data["followeder"]));
+        console.log(data["followeder"][0]);
+        console.log(typeof(data["followeder"][0]));
+        if (data["followeder"].length == 0){
+            console.log("Follow")
+            var button_type = "Follow"
+        }else{
+            for(i = 0; i < data["followeder"].length; i++){
+                if (target_user == data["followeder"][i]){
+                    console.log("Unfollow")
+                    var button_type = "Unfollow"
+                } else{
+                    console.log("Follow")
+                    var button_type = "Follow"
+                }
+            }
+        }
+    });
+    var button_html = '<button type="button" class="btn btn-primary btn-sm" id="follow">'
+                    + button_type + '</button>';
+    console.log(button_html)
+    $("#for_button").append(button_html);
+}
+
 $(document).ready(function(){
     window.setInterval(getUpdatePost, 3000);
+    window.setTimeout(buttonType, 3000);
 })
+

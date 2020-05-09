@@ -12,14 +12,18 @@
                 <p class="card-text">Last Name: {{ last_name }}</p>
                 <p class="card-text">Age: {{ age }}</p>
                 <p class="card-text">Introduction: {{ introduction }}</p>
-                <img src="#" width="col-3" height="col-3" class="card-img-top" alt="User2">'
+                <div class="col-3">
+                    <img src="{{ MEDIA_URL }}{{ profile_pic }}" width="col-1" height="col-1" class="card-img-top" alt="profile_pics">'
+                </div>
 
             </div>
         </div>
 
     </li>
 </ul>
-<button type="submit" class="save btn btn-primary">Change Personal Profile</button>
-
-
+<form action="" method="POST">
+    {% csrf_token %}
+    <button type="submit" class="save btn btn-primary" name="profile_update" value="profile_update">Change Personal Profile</button>
+</form>
 {% endblock %}
+
